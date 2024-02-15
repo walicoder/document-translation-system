@@ -3,3 +3,6 @@ uvicorn==0.25.0
 transformers[torch]
 sentencepiece
 normalizer @ git+https://github.com/csebuetnlp/normalizer
+streamlit==1.31.1
+pandas==2.2.0
+requests==2.31.0

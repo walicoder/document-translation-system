@@ -29,7 +29,8 @@ async def translate(text: str):
     :param text: Bengali text
     :return: English text
     """
-    text_en = bn2en(text)
+    text_en = bn2en.translate(text)
+    # text_en = bn2en(text)
     translation = Translation(text_bn=text, text_en=text_en)
     return translation
 
