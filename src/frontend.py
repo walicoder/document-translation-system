@@ -1,13 +1,15 @@
 import streamlit as st
 import time
-from client import send_get_request
+from src.client import send_get_request
 
+
+st.title("Document Translation Service")
+st.markdown("*Bengali to English Text and Document Generation Service*")
 with st.sidebar:
     st.text_input("Username")
     st.text_input("Password")
     button = st.button("login", key="login")
 
-st.title("Bengali to English Translator")
 
 with st.container(border=True):
     tab1, tab2 = st.tabs(["Text To Text Generation", "Document to Document Generation"])

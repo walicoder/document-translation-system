@@ -12,14 +12,14 @@ app = FastAPI()
 bn2en = Bn2EnTranslator()
 
 
-@app.get('/ping/')
-async def ping():
-    return {"message": "pong"}
+# @app.get('/ping/')
+# async def ping():
+#     return {"message": "pong"}
 
 
-@app.get('/')
+@app.get('/healthcheck')
 async def root():
-    return {"message": "Hello World"}
+    return {"status": "ok"}
 
 
 @app.get('/translate/')
