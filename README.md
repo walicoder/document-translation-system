@@ -35,3 +35,8 @@ Available Commands:
            "bengali_text": "হ্যালো, আপনি কেমন আছেন?",
            "session_id": "03b9c1b8-b2f3-46eb-953c-94446464bf45"
          }'`
+
+## Lauching Frontend and Backend
+- First install all the libraries with `pip install -r requirements.txt`
+- Launch backend `python server.py`
+- Launch frontend `streamlit run frontend/app.py`
