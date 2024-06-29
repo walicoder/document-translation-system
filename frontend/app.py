@@ -19,7 +19,6 @@ if submitted:
             st.sidebar.error("Invalid username or password")
 
 
-st.title("Bengali to English Translator")
 
 @session_handler
 def show_text_translation_history():

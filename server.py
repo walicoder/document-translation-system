@@ -29,7 +29,7 @@ def get_db():
 
 @app.get("/")
 async def root():
-    return {"message": "Hello World"}
+    return {"status": "ok"}
 
 
 # Pydantic model for request body
