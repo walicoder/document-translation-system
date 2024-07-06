@@ -1,0 +1,1 @@
+curl -X POST "http://localhost:8000/validate-user" -H "Content-Type: application/json" -d '{"username":"walima","password":"123456"}'
