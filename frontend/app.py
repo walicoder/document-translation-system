@@ -44,10 +44,11 @@ def add_translation_into_history(translation: dict):
         )
     return response
 
+
 with st.container(border=False):
     tab1, tab2 = st.tabs(["Text To Text Generation", "Document to Document Generation"])
     with tab1:
-        text_input = st.text_area("Enter your Bengali text here", max_chars=600, height=200)
+        text_input = st.text_area("Enter your Bengali text here", max_chars=300, height=200)
         text_translate_btn = st.button("Translate", key="text")
         if text_input and text_translate_btn:
             try:
@@ -64,16 +65,19 @@ with st.container(border=False):
                 print(e)
                 st.error("Error: Can not connect to the service. Please try again later.")
         show_text_translation_history()
+
     with tab2:
-        # st.write("Coming soon...")
-        uploaded_content = st.file_uploader("Upload a valid file", type=["txt", "docx"])
-        file_translate_btn = st.button("Translate", key="file")
-        if uploaded_content and file_translate_btn:
-            with st.spinner("Translating..."):
-                # Here translation happens
-                time.sleep(5)
-            st.success("Translation Done!")
-        if not uploaded_content and file_translate_btn:
-            st.error("Please upload a valid file.")
+        if is_authenticated():
+            uploaded_content = st.file_uploader("Upload a valid file", type=["txt", "docx"])
+            file_translate_btn = st.button("Translate", key="file")
+            if uploaded_content and file_translate_btn:
+                with st.spinner("Translating..."):
+                    # Here translation happens
+                    time.sleep(5)
+                st.success("Translation Done!")
+            if not uploaded_content and file_translate_btn:
+                st.error("Please upload a valid file.")
+        else:
+            st.markdown("🚫 __You must need to login to use the of document translation feature__")
 
 

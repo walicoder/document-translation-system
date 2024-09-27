@@ -4,6 +4,7 @@ import uuid
 import functools
 from client import validate_user
 
+
 def add_auth_to_session(username: str):
     try:
         st.session_state["username"] = username
@@ -19,11 +20,14 @@ def user_authenticated(username: str, password: str) -> bool:
         return True
     return False
 
+
 def is_authenticated() -> bool:
     return 'authenticated' in st.session_state and st.session_state['authenticated']
 
+
 def session_handler(func):
-    generic_text = ("🚫 _You must have to authenticate yourself to view the translation history._")
+    generic_text = "🚫 _You must have to authenticate yourself to view the translation history._"
+
     @functools.wraps(func)
     def wrapper():
         if 'authenticated' in st.session_state and st.session_state['authenticated']:
