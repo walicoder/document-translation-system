@@ -17,7 +17,6 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 bn2en = Bn2EnTranslator()
 
 
-
 # Dependency to get the database session
 def get_db():
     db = SessionLocal()
@@ -52,6 +51,7 @@ class UserOut(BaseModel):
     username: str
     created_at: datetime   
 
+
 @app.get("/users", response_model=List[UserOut])
 def list_users(db: Session = Depends(get_db)):
     users = db.query(User).all()
@@ -64,6 +64,15 @@ def get_translations(username: str, db: Session = Depends(get_db)):
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
     translations = db.query(Translation).filter(Translation.user_id == user.id).all()
+    return translations
+
+
+@app.get("/users/{username}/translations-batch/")
+def get_translations_batch(username: str, db: Session = Depends(get_db)):
+    user = db.query(User).filter(User.username == username).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    translations = db.query(FileTranslation).filter(FileTranslation.user_id == user.id).all()
     return translations
 
 
@@ -93,9 +102,29 @@ def create_translation(username: str, translation: TranslationCreate, db: Sessio
     return new_translation
 
 
+@app.post("/users/{username}/translations-batch/")
+def create_translation_batch(username: str, translation: TranslationCreate, db: Session = Depends(get_db)):
+    user = db.query(User).filter(User.username == username).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    new_translation = FileTranslation(
+        user_id=user.id,
+        input_file=translation.bengali_text,
+        output_file=translation.english_text,
+        translated_at=datetime.now()
+    )
+    db.add(new_translation)
+    db.commit()
+    db.refresh(new_translation)
+    print(new_translation)
+    return new_translation
+
+
 class TranslationResponse(BaseModel):
     text_bn: str
     text_en: str
+
 
 @app.get('/translate/')
 async def translate(text: str):
@@ -108,6 +137,19 @@ async def translate(text: str):
     # text_en = bn2en(text)
     translation = TranslationResponse(text_bn=text, text_en=text_en)
     return translation
+
+
+@app.get('/translate-batch/')
+async def translate_batch(text: str):
+    """
+    Translates a sentence from Bangla to English in batch mode
+    :param text: Bengali text
+    :return: English text
+    """
+    text_en = bn2en.split_n_translate(text)
+    translation = TranslationResponse(text_bn=text, text_en=text_en)
+    return translation
+
 
 if __name__ == "__main__":
     import uvicorn

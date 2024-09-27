@@ -5,6 +5,7 @@ from datetime import datetime
 
 Base = declarative_base()
 
+
 class User(Base):
     __tablename__ = 'users'
     id = Column(Integer, primary_key=True)
@@ -13,6 +14,7 @@ class User(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
     translations = relationship('Translation', back_populates='user')
     file_translations = relationship('FileTranslation', back_populates='user')
+
 
 class Translation(Base):
     __tablename__ = 'translations'
@@ -24,6 +26,7 @@ class Translation(Base):
     session_id = Column(String)
     user = relationship('User', back_populates='translations')
 
+
 class FileTranslation(Base):
     __tablename__ = 'file_translations'
     id = Column(Integer, primary_key=True)
@@ -33,10 +36,12 @@ class FileTranslation(Base):
     translated_at = Column(DateTime, default=datetime.utcnow)
     user = relationship('User', back_populates='file_translations')
 
+
 # Create the database and tables
 def create_database():
     engine = create_engine('sqlite:///db/translation_app.db')
     Base.metadata.create_all(engine)
+
 
 if __name__ == '__main__':
     create_database()
